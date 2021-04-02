@@ -6,7 +6,7 @@ import Storage from 'node-storage'
 import { Chat } from 'telegraf/typings/telegram-types'
 
 interface MyContext extends Context {
-  
+
 }
 
 type TelegramType = {
@@ -25,7 +25,7 @@ class Telegram {
   constructor({ eventEmitter, storage }: TelegramType) {
     this.eventEmitter = eventEmitter
     this.storage = storage
-    
+
     this.bot = new Telegraf(Config.notifications.telegram.bot_token)
     this.isStarted = false
     this.chatsId = []
@@ -49,7 +49,8 @@ class Telegram {
       this.setChatId(ctx.chat)
 
       // Reply
-      ctx.reply(`Welcome ${ctx.chat.first_name} !\nDon't worry, I'll let you know if there are new stocks. :)`)
+      // ctx.reply(`Welcome ${ctx.chat.first_name} !\nDon't worry, I'll let you know if there are new stocks. :)`)
+      ctx.reply(`Benvenutə ${ctx.chat.first_name}!\nNon preoccuparti, ti farò sapere se ci sono nuove magic box disponibili :)`)
     })
 
     // Stop
@@ -61,12 +62,14 @@ class Telegram {
       this.removeChatId(ctx.chat)
 
       // Reply
-      ctx.reply(`Bye ${ctx.chat.first_name} !\nI remain available if you need me.\n/start - If you want to receive the new stocks available.`)
+      // ctx.reply(`Bye ${ctx.chat.first_name} !\nI remain available if you need me.\n/start - If you want to receive the new stocks available.`)
+      ctx.reply(`A presto ${ctx.chat.first_name}!\nRimango a disposizione se hai bisogno di me.\n/start - Se vuoi ricevere le notifiche sulle magic box disponibili.`)
     })
 
     // Help
-    this.bot.help((ctx) => ctx.reply('/start - If you want to receive the new stocks available.\n/stop - If you want to stop receiving new stocks available.'))
-    
+    // this.bot.help((ctx) => ctx.reply('/start - If you want to receive the new stocks available.\n/stop - If you want to stop receiving new stocks available.'))
+    this.bot.help((ctx) => ctx.reply('/start - Se vuoi ricevere le notifiche sulle magic box disponibili.\n/stop - Se vuoi smettere di ricevere le notifiche sulle nuove disponibilità.'))
+
     this.bot.launch()
   }
 
@@ -101,7 +104,7 @@ class Telegram {
   sendMessage(data: string) {
     for (let i = 0; i < this.chatsId.length; i++) {
       const chatId = this.chatsId[i];
-      
+
       this.bot.telegram.sendMessage(chatId, data)
     }
   }
